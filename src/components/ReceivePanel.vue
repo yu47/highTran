@@ -13,7 +13,7 @@ const props = defineProps<{
 }>();
 
 const code = ref("");
-const saveDir = ref("");
+const saveDir = ref(localStorage.getItem("ft-save-dir") || "");
 const status = ref<ReceiveStatus | null>(null);
 const error = ref("");
 const isReceiving = ref(false);
@@ -73,7 +73,10 @@ onUnmounted(() => { unlisten?.(); });
 
 async function selectDir() {
   const result = await open({ directory: true, multiple: false });
-  if (result) saveDir.value = result as string;
+  if (result) {
+    saveDir.value = result as string;
+    localStorage.setItem("ft-save-dir", saveDir.value);
+  }
 }
 
 async function startReceive() {
